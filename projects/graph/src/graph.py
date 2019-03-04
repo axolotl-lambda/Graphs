@@ -30,7 +30,6 @@ class Graph:
             self.vertices[item].add(other)
 
     def breadth_first_traversal(self):
-        print('starting breadth first traversal')
         # grab keys to all vertices/nodes
         nodes = [*self.vertices]
         # if none exist, do nothing
@@ -52,7 +51,6 @@ class Graph:
                         queue.put(neighbor)
 
     def depth_first_traversal(self):
-        print('starting depth first traversal')
         # grab keys to all vertices/nodes
         nodes = [*self.vertices]
         # if none exist, do nothing
@@ -74,11 +72,48 @@ class Graph:
                         if neighbor not in visited:
                             stack.append(neighbor)
 
-    def recursive_depth_first_traversal(self):
-        pass
+    def recursive_depth_first_traversal(self, current=None, visited=set()):
+        if not current:
+            try:
+                current = [*self.vertices][0]
+            except IndexError:
+                pass
 
-    def breadth_first_search(self):
-        pass
+        print(current)
+        visited.add(current)
+        for neighbor in self.vertices[current]:
+            if neighbor not in visited:
+                self.recursive_depth_first_traversal(neighbor, visited)
+
+    def breadth_first_search(self, start, end):
+        # check that start and end exist
+        # set current to start
+        # add paths to queue as we traverse the graph
+        # update the paths as we go and add them back to the queue
+        # all paths will either fail to reach the end or reach the end
+        # when they succeed, we add them to the paths array
+        # we then pull out the shortest path
+        if not start in self.vertices or not end in self.vertices:
+            pass
+        else:
+            paths = []
+            queue = Queue()
+            queue.put([start])
+
+            while not queue.empty():
+                current_path = queue.get()
+                current = current_path[-1]
+
+                if current == end:
+                    paths.append(current_path)
+                else:
+                    for item in self.vertices[current]:
+                        if item not in current_path:
+                            queue.put(list(current_path) + [item])
+
+            paths.sort(key=len)
+            print(paths)
+            return paths[0]
 
     def depth_first_search(self):
         pass
@@ -105,7 +140,19 @@ graph.add_directed_edge('2', '3')
 graph.add_directed_edge('4', '6')
 
 # run breadth_first_traversal
+print('running breadth first traversal')
 graph.breadth_first_traversal()
 
 # run depth_first_traversal
+print('running depth first traversal')
 graph.depth_first_traversal()
+
+# run recursive_depth_first_traversal
+print('running recursive depth first traversal')
+graph.recursive_depth_first_traversal()
+
+# run breadth_first_search
+print('running breadth first search')
+print(graph.breadth_first_search('1', '7'))
+print(graph.breadth_first_search('7', '4'))
+print(graph.breadth_first_search('4', '6'))
