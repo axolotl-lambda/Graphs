@@ -115,8 +115,32 @@ class Graph:
             print(paths)
             return paths[0]
 
-    def depth_first_search(self):
-        pass
+    def depth_first_search(self, start, end):
+        if not start in self.vertices or not end in self.vertices:
+            pass
+        else:
+            paths = []
+            stack = []
+            stack.append([start])
+
+            while len(stack):
+                current_path = stack.pop()
+                current = current_path[-1]
+
+                if current == end:
+                    paths.append(current_path)
+                else:
+                    for item in self.vertices[current]:
+                        if item not in current_path:
+                            stack.append(list(current_path) + [item])
+
+            paths.sort(key=len)
+            print(paths)
+            return paths[0]
+
+            visited = set()
+            stack = []
+            stack.append(start)
 
 
 # set up graph
@@ -156,3 +180,9 @@ print('running breadth first search')
 print(graph.breadth_first_search('1', '7'))
 print(graph.breadth_first_search('7', '4'))
 print(graph.breadth_first_search('4', '6'))
+
+# run depth_first_search
+print('running depth first search')
+print(graph.depth_first_search('1', '7'))
+print(graph.depth_first_search('7', '4'))
+print(graph.depth_first_search('4', '6'))
