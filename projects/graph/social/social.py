@@ -1,4 +1,5 @@
 from random import randint
+from queue import *
 
 
 class User:
@@ -86,6 +87,19 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+        queue = Queue()
+        queue.put([userID])
+
+        while not queue.empty():
+            current_path = queue.get()
+            current = current_path[-1]
+            if current not in visited:
+                visited[current] = current_path
+                # queue up new paths
+                for item in self.friendships[current]:
+                    if item not in visited:
+                        queue.put(list(current_path) + [item])
+
         return visited
 
 
