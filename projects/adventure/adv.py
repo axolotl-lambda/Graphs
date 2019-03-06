@@ -33,16 +33,28 @@ undiscovered = set()
 for exit in player.currentRoom.getExits():
     undiscovered.add(f'{player.currentRoom.id}{exit}')
 
-print(found_map)
-print(undiscovered)
+# helper function for reversion direction
+
+
+def backtrack(direction):
+    if direction == 'n':
+        return 's'
+    if direction == 's':
+        return 'n'
+    if direction == 'e':
+        return 'w'
+    if direction == 'w':
+        return 'e'
+
 
 while undiscovered:
     # execute a depth first search until we reach a dead end
     next_move = None
+    starting_room = player.currentRoom.id
 
     # find an exit that hasn't been discovered
-    for exit in player.currentRoom.getExits():
-        if found_map[player.currentRoom.id][exit] == '?':
+    for exit in found_map[starting_room]:
+        if found_map[starting_room][exit] == '?':
             next_move = exit
             break
 
@@ -51,8 +63,20 @@ while undiscovered:
     # move player
     player.travel(next_move)
 
+    # add new room to found map
     new_room = player.currentRoom.id
-    new_exits = player.currentRoom.getExits()
+
+    if new_room not in found_map:
+        found_map[new_room] = {
+            x: '?' for x in player.currentRoom.getExits()}
+
+    # update rest of data stores
+    found_map[starting_room][next_move] = new_room
+    found_map[new_room][backtrack(next_move)] = starting_room
+
+    for exit, value in found_map[new_room].items():
+        if value == '?':
+            undiscovered.add(f'{new_room}{exit}')
 
     # execute a breadth first search on the found map looking for the nearest unknown
 
