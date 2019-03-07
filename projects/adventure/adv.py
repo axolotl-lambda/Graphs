@@ -124,7 +124,7 @@ while undiscovered:
             else:
                 for direction, room in found_map[current[1]].items():
                     if room != starting_room and room not in [y for x, y in current_path]:
-                        # x is direction
+                        # y is room
                         queue.put(list(current_path) + [[direction, room]])
 
 
