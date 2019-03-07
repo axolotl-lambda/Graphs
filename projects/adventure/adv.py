@@ -65,10 +65,20 @@ while undiscovered:
         starting_room = player.currentRoom.id
 
         # find an exit that hasn't been discovered
-        for exit in found_map[starting_room]:
-            if found_map[starting_room][exit] == '?':
-                next_move = exit
-                break
+        if 'n' in found_map[starting_room] and found_map[starting_room]['n'] == '?':
+            next_move = 'n'
+        elif 'e' in found_map[starting_room] and found_map[starting_room]['e'] == '?':
+            next_move = 'e'
+        elif 's' in found_map[starting_room] and found_map[starting_room]['s'] == '?':
+            next_move = 's'
+        elif 'w' in found_map[starting_room] and found_map[starting_room]['w'] == '?':
+            next_move = 'w'
+
+        # old slower solution 
+        # for exit in found_map[starting_room]:
+        #     if found_map[starting_room][exit] == '?':
+        #         next_move = exit
+        #         break
 
         # remove that undiscovered
         undiscovered.remove(f'{player.currentRoom.id}{next_move}')
