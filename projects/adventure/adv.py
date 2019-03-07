@@ -29,7 +29,6 @@ player = Player("Name", world.startingRoom)
 # print(world.printRooms())
 # sys.exit()
 
-
 # FILL THIS IN
 traversalPath = []
 
@@ -43,9 +42,7 @@ undiscovered = set()
 for exit in player.currentRoom.getExits():
     undiscovered.add(f'{player.currentRoom.id}{exit}')
 
-# helper function for reversion direction
-
-
+# helper function for reversing direction
 def backtrack(direction):
     if direction == 'n':
         return 's'
@@ -65,6 +62,7 @@ while undiscovered:
         starting_room = player.currentRoom.id
 
         # find an exit that hasn't been discovered
+        # this solution is fasater than randomly grabbing an item as in the old solution
         if 'n' in found_map[starting_room] and found_map[starting_room]['n'] == '?':
             next_move = 'n'
         elif 'e' in found_map[starting_room] and found_map[starting_room]['e'] == '?':
@@ -101,11 +99,11 @@ while undiscovered:
             if value == '?':
                 undiscovered.add(f'{new_room}{exit}')
 
+        # remove backwards path from undiscovered if it exists
         if f'{new_room}{backtrack(next_move)}' in undiscovered:
             undiscovered.remove(f'{new_room}{backtrack(next_move)}')
 
     # execute a breadth first search on the found map looking for the nearest unknown
-
     else:
         starting_room = player.currentRoom.id
         queue = Queue()
